@@ -1,4 +1,4 @@
-name: Build and Test Data Mesh
+name: Build, Test, Pack, and Push
 on: 
   push:
     branches: [ main ]
