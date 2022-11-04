@@ -1,8 +1,7 @@
 name: Build and Test Data Mesh
 on: 
-  pull_request:
-    branches:
-      - main
+  push:
+    branches: [ main ]
 
 env:
   PROJECT: Devantler.KindCLI/Devantler.KindCLI.csproj
