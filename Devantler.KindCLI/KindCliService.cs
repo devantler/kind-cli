@@ -34,7 +34,7 @@ public class KindCliService : IKindCliService
         throw new NotImplementedException();
     }
 
-    public async Task<BufferedCommandResult> GetClusterInfoAsync(string clusterName)
+    public async Task<BufferedCommandResult> GetClusterInfoAsync(string? clusterName)
     {
         throw new NotImplementedException();
     }
@@ -48,12 +48,12 @@ public class KindCliService : IKindCliService
         return clusters;
     }
 
-    public async Task<CommandResult> LoadImageArchiveAsync(List<string> imageNames, string? clusterName)
+    public async Task<CommandResult> LoadImageArchiveAsync(string? clusterName, string imageArchivePath)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<CommandResult> LoadImageAsync(List<string> imageNames, string? clusterName)
+    public async Task<CommandResult> LoadImageAsync(string? clusterName, List<string> imageNames)
     {
         throw new NotImplementedException();
     }
