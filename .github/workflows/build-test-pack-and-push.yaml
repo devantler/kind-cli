@@ -5,6 +5,7 @@ on:
 
 env:
   PROJECT: Devantler.KindCLI/Devantler.KindCLI.csproj
+  TEST_PROJECT: Devantler.KindCLI.Tests/Devantler.KindCLI.Tests.csproj
   NUGET_PACKAGE: Devantler.KindCLI/bin/Release/Devantler.KindCLI.*.nupkg
 
 jobs:
@@ -24,8 +25,8 @@ jobs:
         run: dotnet restore $PROJECT
       - name: Build
         run: dotnet build --configuration Release --no-restore $PROJECT
-      # - name: Test
-      #   run: dotnet test --no-restore --verbosity normal $project
+      - name: Test
+        run: dotnet test --configuration Release --no-restore $TEST_PROJECT
       - name: Pack
         run: dotnet pack --configuration Release --no-build $PROJECT
       - name: Push
