@@ -1,12 +1,25 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Devantler.KindCLI.Tests;
 
 public class KindCliServiceTests
 {
-    [Fact]
-    public void CreateClusterAsync_NoClusterNameAndNoClusterConfig_CreatesDefaultCluster()
+    private readonly IKindCliService _kindCliService;
+
+    public KindCliServiceTests()
     {
+        _kindCliService = new KindCliService();
+    }
+
+    [Fact]
+    public async Task CreateClusterAsync_NoClusterNameAndNoClusterConfig_CreatesDefaultCluster()
+    {
+        await _kindCliService.CreateClusterAsync();
+        var result = await _kindCliService.GetClustersAsync();
+        Assert.Equal("kind", result.First());
+        await _kindCliService.DeleteClusterAsync();
     }
 
     [Fact]
@@ -45,8 +58,11 @@ public class KindCliServiceTests
     }
 
     [Fact]
-    public void DeleteClusterAsync_NoClusterName_DeletesDefaultCluster()
+    public async Task DeleteClusterAsync_NoClusterName_DeletesDefaultCluster()
     {
+        await _kindCliService.CreateClusterAsync();
+        await _kindCliService.DeleteClusterAsync();
+        Assert.Empty(await _kindCliService.GetClustersAsync());
     }
 
     [Fact]

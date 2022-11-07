@@ -7,7 +7,7 @@ public class KindCliService : IKindCliService
 {
     public Command KindCli => Cli.Wrap("kind");
 
-    public async Task CreateClusterAsync(string? clusterName, string? configPath)
+    public async Task CreateClusterAsync(string? clusterName = default, string? configPath = default)
     {
         var command = (clusterName, configPath) switch
         {
@@ -16,27 +16,29 @@ public class KindCliService : IKindCliService
             (_, null) => KindCli.WithArguments($"create cluster --name {clusterName}"),
             _ => KindCli.WithArguments($"create cluster --name {clusterName} --config {configPath}")
         };
-        await command.ExecuteAsync();
+        await command.ExecuteBufferedAsync();
     }
 
-    public async Task<CommandResult> DeleteClusterAsync(string? clusterName)
+    public async Task<CommandResult> DeleteClusterAsync(string? clusterName = default)
     {
         var command = clusterName switch
         {
             null => KindCli.WithArguments("delete cluster"),
             _ => KindCli.WithArguments($"delete cluster --name {clusterName}")
         };
+        return await command.ExecuteBufferedAsync();
+    }
+
+    public async Task<CommandResult> ExportLogsAsync(string? clusterName = default, string? logPath = default)
+    {
+        var command = (clusterName, logPath) switch
+        {
+            (null, null) => KindCli.WithArguments("export logs"),
+            (null, _) => KindCli.WithArguments($"export logs {logPath}"),
+            (_, null) => KindCli.WithArguments($"export logs --name {clusterName}"),
+            _ => KindCli.WithArguments($"export logs {logPath} --name {clusterName}")
+        };
         return await command.ExecuteAsync();
-    }
-
-    public async Task<CommandResult> ExportLogsAsync(string? clusterName, string? logPath)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<BufferedCommandResult> GetClusterInfoAsync(string? clusterName)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<string>> GetClustersAsync()
@@ -48,13 +50,23 @@ public class KindCliService : IKindCliService
         return clusters;
     }
 
-    public async Task<CommandResult> LoadImageArchiveAsync(string? clusterName, string imageArchivePath)
+    public async Task<CommandResult> LoadImageArchiveAsync(string imageArchivePath, string? clusterName = default)
     {
-        throw new NotImplementedException();
+        var command = clusterName switch
+        {
+            null => KindCli.WithArguments($"load image-archive {imageArchivePath}"),
+            _ => KindCli.WithArguments($"load image-archive {imageArchivePath} --name {clusterName}")
+        };
+        return await command.ExecuteAsync();
     }
 
-    public async Task<CommandResult> LoadImageAsync(string? clusterName, List<string> imageNames)
+    public async Task<CommandResult> LoadImageAsync(List<string> imageNames, string? clusterName = default)
     {
-        throw new NotImplementedException();
+        var command = clusterName switch
+        {
+            null => KindCli.WithArguments($"load docker-image {string.Join(' ', imageNames)}"),
+            _ => KindCli.WithArguments($"load docker-image {string.Join(' ', imageNames)} --name {clusterName}")
+        };
+        return await command.ExecuteAsync();
     }
 }
