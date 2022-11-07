@@ -30,4 +30,4 @@ jobs:
       - name: Pack
         run: dotnet pack --configuration Release --no-build $PROJECT
       - name: Push
-        run: dotnet nuget push $NUGET_PACKAGE --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+        run: dotnet nuget push $NUGET_PACKAGE --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate

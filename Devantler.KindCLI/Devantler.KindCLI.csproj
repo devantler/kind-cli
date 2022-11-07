@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Devantler.KindCLI</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>devantler</Authors>
     <Company>Devantler Software</Company>
     <PackageDescription>A dotnet library to run Kind CLI commands.</PackageDescription>
