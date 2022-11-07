@@ -9,7 +9,7 @@
     <Authors>devantler</Authors>
     <Company>Devantler Software</Company>
     <PackageDescription>A dotnet library to run Kind CLI commands.</PackageDescription>
-    <RepositoryUrl>https://github.com/devantler/KindCLI</RepositoryUrl>
+    <RepositoryUrl>https://github.com/devantler/kind-cli</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
