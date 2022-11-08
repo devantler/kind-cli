@@ -28,7 +28,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: lololol
-        run: ls Devantler.KindCLI.Tests/bin/Debug/net6.0/assets
+        run: ls Devantler.KindCLI.Tests/bin/Release/net6.0/assets
       - name: Test
         run: dotnet test --configuration Release --verbosity normal
       - name: Pack
