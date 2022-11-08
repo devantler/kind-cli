@@ -29,6 +29,8 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --configuration Release --verbosity normal
+      - name: lololol
+        run: ls
       - name: Pack
         run: dotnet pack --configuration Release --no-build
       - name: Push
