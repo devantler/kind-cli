@@ -5,10 +5,13 @@ namespace Devantler.KindCLI;
 
 public class KindCliService : IKindCliService
 {
-    public Command KindCli => Cli.Wrap("kind");
+    public Command KindCli => Cli.Wrap("./assets/kind-darwin-arm64");
 
     public async Task CreateClusterAsync(string? clusterName = default, string? configPath = default)
     {
+        if(configPath != default && !File.Exists(configPath)){
+            throw new ArgumentException($"The specified 'configPath': '{configPath}' does not exist.");
+        }
         var command = (clusterName, configPath) switch
         {
             (null, null) => KindCli.WithArguments("create cluster"),

@@ -17,6 +17,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Set up k8s Kind Cluster
+        uses: helm/kind-action@v1.3.0
+        with:
+          install_only: true
       - name: Setup .NET SDK v${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3.0.0
         with:

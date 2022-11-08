@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -22,6 +21,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Devantler.KindCLI\Devantler.KindCLI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets/**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
