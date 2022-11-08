@@ -27,6 +27,8 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
+      - name: Setup Test Assets
+        run: docker pull nginx:alpine
       - name: Test
         run: dotnet test --configuration Release --verbosity normal
       - name: Pack

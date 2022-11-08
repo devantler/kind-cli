@@ -258,7 +258,7 @@ public class KindCliServiceTests
     public async Task LoadImageAsync_ValidImageNamesAndNoClusterName_LoadsImagesToDefaultCluster()
     {
         await _kindCliService.CreateClusterAsync();
-        await _kindCliService.LoadImageAsync(new List<string> { "nginx:latest" });
+        await _kindCliService.LoadImageAsync(new List<string> { "nginx:alpine" });
         await _kindCliService.DeleteClusterAsync();
     }
 
@@ -266,14 +266,14 @@ public class KindCliServiceTests
     public async Task LoadImageAsync_ValidImageNamesAndValidClusterName_LoadsImagesToNamedCluster()
     {
         await _kindCliService.CreateClusterAsync("named-cluster");
-        await _kindCliService.LoadImageAsync(new List<string> { "nginx:latest" }, "named-cluster");
+        await _kindCliService.LoadImageAsync(new List<string> { "nginx:alpine" }, "named-cluster");
         await _kindCliService.DeleteClusterAsync("named-cluster");
     }
 
     [Fact]
     public async Task LoadImageAsync_ValidImageNamesAndInvalidClusterName_Throws()
     {
-        var ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _kindCliService.LoadImageAsync(new List<string> { "nginx:latest" }, "@_~"));
+        var ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _kindCliService.LoadImageAsync(new List<string> { "nginx:alpine" }, "@_~"));
         Assert.Equal("The specified 'clusterName': '@_~' is invalid. It must match '^[a-z0-9.-]+$'", ex.Message);
     }
 
