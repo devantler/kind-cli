@@ -5,7 +5,7 @@ namespace Devantler.KindCLI;
 
 public static class IServiceCollectionExtensions
 {
-    public static async Task<IServiceCollection> AddKindCliServiceAsync(this IServiceCollection services)
+    public static IServiceCollection AddKindCliService(this IServiceCollection services)
     {
         return services.AddScoped<IKindCliService, KindCliService>();
     }
