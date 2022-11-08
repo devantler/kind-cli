@@ -1,0 +1,37 @@
+name: Build, Test, Pack, and Push
+on: 
+  push:
+    branches: [ main ]
+
+env:
+  NUGET_PACKAGE: Devantler.KindCLI/bin/Release/Devantler.KindCLI.*.nupkg
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        dotnet-version: ["6.0.x"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up k8s Kind Cluster
+        uses: helm/kind-action@v1.4.0
+        with:
+          install_only: true
+      - name: Setup .NET SDK v${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --configuration Release --verbosity normal
+      - name: Pack
+        run: dotnet pack --configuration Release --no-build
+      - name: Add NuGet Source
+        run: dotnet nuget add source --username devantler --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/devantler/index.json"
+      - name: Push
+        run: dotnet nuget push $NUGET_PACKAGE --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate
