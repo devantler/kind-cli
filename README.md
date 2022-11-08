@@ -9,12 +9,12 @@ A dotnet library to run Kind CLI commands. It is a wrapper around the Kind CLI a
 
 The host must be either:
 
-- linux-arm64
-- linux-amd64
-- linux-s390x
-- windows-amd64
-- darwin-arm64
-- darwin-amd64
+- Linux Arm64
+- Linux Amd64
+- Linux s390x
+- Windows Amd64
+- Darwin Arm64
+- Darwin Amd64
 
 In other words, it works on Linux, Windows and MacOS, with 64bit AMD and Arm CPU Architectures.
 
