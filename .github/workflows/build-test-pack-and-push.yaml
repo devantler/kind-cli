@@ -4,8 +4,6 @@ on:
     branches: [ main ]
 
 env:
-  PROJECT: Devantler.KindCLI/Devantler.KindCLI.csproj
-  TEST_PROJECT: Devantler.KindCLI.Tests/Devantler.KindCLI.Tests.csproj
   NUGET_PACKAGE: Devantler.KindCLI/bin/Release/Devantler.KindCLI.*.nupkg
 
 jobs:
@@ -26,12 +24,12 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Restore
-        run: dotnet restore $PROJECT
+        run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release --no-restore $PROJECT
+        run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --configuration Release --verbosity normal --no-restore $TEST_PROJECT
+        run: dotnet test --configuration Release --verbosity normal
       - name: Pack
-        run: dotnet pack --configuration Release --no-build $PROJECT
+        run: dotnet pack --configuration Release --no-build
       - name: Push
         run: dotnet nuget push $NUGET_PACKAGE --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate
