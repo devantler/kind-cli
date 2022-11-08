@@ -31,7 +31,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --configuration Release --verbosity normal
+        run: dotnet test --configuration Release --no-build
       - name: Pack
         run: dotnet pack --configuration Release --no-build
       - name: Add NuGet Source
