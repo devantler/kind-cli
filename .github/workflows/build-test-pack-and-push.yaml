@@ -22,7 +22,7 @@ jobs:
           install_only: true
       - name: Set up test images
         run: docker pull nginx:alpine
-      - name: Setup .NET SDK v${{ matrix.dotnet-version }}
+      - name: Set up .NET SDK v${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
