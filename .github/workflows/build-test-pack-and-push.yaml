@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore $PROJECT
       - name: Test
-        run: dotnet test --configuration Release --no-restore $TEST_PROJECT
+        run: dotnet test --configuration Release --verbosity normal --no-restore $TEST_PROJECT
       - name: Pack
         run: dotnet pack --configuration Release --no-build $PROJECT
       - name: Push
