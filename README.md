@@ -6,7 +6,15 @@ A dotnet library to run Kind CLI commands.
 
 - .NET 6.0
 - Docker
-- Kind CLI binary
+
+The host must be either:
+
+- linux-arm64
+- linux-amd64
+- linux-s390x
+- windows-amd64
+- darwin-arm64 (macos)
+- darwin-amd64 (macos)
 
 ## How to use
 
@@ -14,6 +22,17 @@ Register the KindCLI service in your DI container:
 
 ```csharp
 services.AddKindCliService();
+```
+
+Then inject the service where you need it:
+
+```csharp
+private readonly IKindCliService _kindCliService;
+
+public ClassName(KindCliService kindCliService) {
+    _kindCliService = kindCliService;
+}
+
 ```
 
 Call the different methods on the `KindCliService` to run commands:
