@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Devantler.KindCLI</PackageId>
-    <Version>0.17.0</Version>
+    <Version>0.17.1</Version>
     <Authors>devantler</Authors>
     <Company>Devantler Software</Company>
     <PackageDescription>A dotnet library to run Kind CLI commands.</PackageDescription>
