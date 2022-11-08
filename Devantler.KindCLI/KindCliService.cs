@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using CliWrap;
 using CliWrap.Buffered;
 
@@ -9,7 +10,17 @@ public class KindCliService : IKindCliService
     {
         get
         {
-            return Cli.Wrap("./assets/kind-darwin-arm64");
+            var binaryPath = (Environment.OSVersion.Platform, RuntimeInformation.ProcessArchitecture) switch
+            {
+                (PlatformID.Win32NT, Architecture.X64) => "assets/kind-windows-amd64",
+                (PlatformID.Unix, Architecture.X64) => "assets/kind-linux-amd64",
+                (PlatformID.Unix, Architecture.Arm64) => "assets/kind-linux-arm64",
+                (PlatformID.Unix, Architecture.S390x) => "assets/kind-linux-s390x",
+                (PlatformID.MacOSX, Architecture.X64) => "assets/kind-darwin-amd64",
+                (PlatformID.MacOSX, Architecture.Arm64) => "assets/kind-darwin-arm64",
+                _ => throw new PlatformNotSupportedException()
+            };
+            return Cli.Wrap(binaryPath);
         }
     }
 

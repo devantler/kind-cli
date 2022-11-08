@@ -27,11 +27,11 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: lololol
-        run: ls Devantler.KindCLI.Tests/bin/Release/net6.0/assets
       - name: Test
         run: dotnet test --configuration Release --verbosity normal
       - name: Pack
         run: dotnet pack --configuration Release --no-build
+      - name: Add NuGet Source
+        run: dotnet nuget add source --username devantler --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/devantler/index.json"
       - name: Push
         run: dotnet nuget push $NUGET_PACKAGE --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate
