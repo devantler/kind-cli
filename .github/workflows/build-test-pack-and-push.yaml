@@ -32,7 +32,8 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --collect:"XPlat Code Coverage" --configuration Release --no-build
-      - uses: codecov/codecov-action@v3
+      - name: Upload Code Coverage to CodeCov
+        uses: codecov/codecov-action@v3
         with:
           files: Devantler.KindCLI.Tests/TestResults/**/coverage.cobertura.xml
           fail_ci_if_error: true
