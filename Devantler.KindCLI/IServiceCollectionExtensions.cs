@@ -1,4 +1,3 @@
-using CliWrap;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Devantler.KindCLI;

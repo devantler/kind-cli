@@ -1,5 +1,4 @@
 using CliWrap;
-using CliWrap.Buffered;
 
 namespace Devantler.KindCLI;
 
