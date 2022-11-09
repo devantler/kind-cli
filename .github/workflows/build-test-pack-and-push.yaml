@@ -9,10 +9,10 @@ env:
   NUGET_USER: devantler
 jobs:
   build-and-test:
-    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        dotnet-version: ["7.0.x"]
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -25,7 +25,7 @@ jobs:
       - name: Set up .NET SDK v${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: 7.0.x
       - name: Restore
         run: dotnet restore
       - name: Build
