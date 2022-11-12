@@ -23,6 +23,8 @@ jobs:
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 7.0.x
+      - name: Add NuGet Source
+        run: dotnet nuget add source --username $NUGET_USER --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "${{ env.NUGET_FEED }}"
       - name: Restore
         run: dotnet restore
       - name: Build
@@ -36,7 +38,5 @@ jobs:
           fail_ci_if_error: true
       - name: Pack
         run: dotnet pack --configuration Release --no-build
-      - name: Add NuGet Source
-        run: dotnet nuget add source --username $NUGET_USER --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "${{ env.NUGET_FEED }}"
       - name: Push
         run: dotnet nuget push $NUGET_PACKAGE --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate
