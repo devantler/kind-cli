@@ -11,13 +11,9 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest] # TODO: Add macos-latest and windows-latest if/when helm/kind-action@v1.4.0 supports other OSes
     runs-on: ${{ matrix.os }}
     steps:
-      - if: matrix.os == 'macos-latest'
-        run: | 
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
-          brew install dpkg
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Set up k8s Kind Cluster
