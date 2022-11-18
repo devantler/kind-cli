@@ -1,8 +1,8 @@
-# KindCLI
+# [KindCLI](https://kind.sigs.k8s.io)
 
 [![codecov](https://codecov.io/github/devantler/kind-cli/branch/main/graph/badge.svg?token=4TRICYGDC1)](https://codecov.io/github/devantler/kind-cli)
 
-A dotnet library to run Kind CLI commands. It is a wrapper around the Kind CLI and is pre-packaged with the needed binaries.
+A dotnet library to run [Kind CLI](https://kind.sigs.k8s.io) commands. It is a wrapper around the [Kind CLI](https://kind.sigs.k8s.io) and is pre-packaged with the needed binaries.
 
 ## Requirements
 
