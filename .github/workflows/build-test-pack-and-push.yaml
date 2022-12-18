@@ -8,7 +8,7 @@ env:
   NUGET_FEED: https://nuget.pkg.github.com/devantler/index.json
   NUGET_USER: devantler
 jobs:
-  build-and-test:
+  build-test-pack-and-push:
     strategy:
       matrix:
         os: [ubuntu-latest] # TODO: Add macos-latest and windows-latest if/when helm/kind-action@v1.4.0 supports other OSes
