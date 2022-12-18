@@ -1,0 +1,35 @@
+name: Build and test
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest] # TODO: Add macos-latest and windows-latest if/when helm/kind-action@v1.4.0 supports other OSes
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up k8s Kind Cluster
+        uses: helm/kind-action@v1.4.0
+        with:
+          install_only: true
+      - name: Set up test images
+        run: docker pull nginx:alpine
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --collect:"XPlat Code Coverage" --configuration Release --no-build
+      - name: Upload Code Coverage to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          files: Devantler.KindCLI.Tests/TestResults/**/coverage.cobertura.xml
+          fail_ci_if_error: true
