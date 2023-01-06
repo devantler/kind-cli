@@ -5,7 +5,7 @@ using CliWrap.Buffered;
 
 namespace Devantler.KindCLI;
 
-public class KindCliService : IKindCliService
+public partial class KindCliService : IKindCliService
 {
     public Command KindCli
     {
@@ -25,9 +25,12 @@ public class KindCliService : IKindCliService
         }
     }
 
+    [GeneratedRegex("^[a-z0-9.-]+$")]
+    private static partial Regex ClusterNameRegex();
+
     public async Task CreateClusterAsync(string? clusterName = default, string? configPath = default)
     {
-        if (clusterName != default && !Regex.Match(clusterName, "^[a-z0-9.-]+$").Success)
+        if (clusterName != default && !ClusterNameRegex().Match(clusterName).Success)
             throw new ArgumentException($"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'");
         if (configPath != default && !File.Exists(configPath))
             throw new ArgumentException($"The specified 'configPath': '{configPath}' does not exist.");
@@ -44,7 +47,7 @@ public class KindCliService : IKindCliService
 
     public async Task<CommandResult> DeleteClusterAsync(string? clusterName = default)
     {
-        if (clusterName != default && !Regex.Match(clusterName, "^[a-z0-9.-]+$").Success)
+        if (clusterName != default && !ClusterNameRegex().Match(clusterName).Success)
             throw new ArgumentException($"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'");
         var command = clusterName switch
         {
@@ -56,7 +59,7 @@ public class KindCliService : IKindCliService
 
     public async Task<CommandResult> ExportLogsAsync(string? clusterName = default, string? logPath = default)
     {
-        if (clusterName != default && !Regex.Match(clusterName, "^[a-z0-9.-]+$").Success)
+        if (clusterName != default && !ClusterNameRegex().Match(clusterName).Success)
             throw new ArgumentException($"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'");
         var command = (clusterName, logPath) switch
         {
@@ -79,7 +82,7 @@ public class KindCliService : IKindCliService
 
     public async Task<CommandResult> LoadImageArchiveAsync(string imageArchivePath, string? clusterName = default)
     {
-        if (clusterName != default && !Regex.Match(clusterName, "^[a-z0-9.-]+$").Success)
+        if (clusterName != default && !ClusterNameRegex().Match(clusterName).Success)
             throw new ArgumentException($"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'");
         if (!File.Exists(imageArchivePath))
             throw new ArgumentException($"The specified 'imageArchivePath': '{imageArchivePath}' does not exist.");
@@ -95,7 +98,7 @@ public class KindCliService : IKindCliService
     {
         if (imageNames.Count == 0)
             throw new ArgumentException("The specified 'imageNames' must contain at least one image name.");
-        if (clusterName != default && !Regex.Match(clusterName, "^[a-z0-9.-]+$").Success)
+        if (clusterName != default && !ClusterNameRegex().Match(clusterName).Success)
             throw new ArgumentException($"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'");
         var command = clusterName switch
         {
