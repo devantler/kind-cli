@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Devantler.KindCLI.Tests;
 
-public class IServiceCollectionExtensionsTests
+public class ServiceCollectionExtensionsTests
 {
     [Fact]
     public void AddKindCliService_RegistersScopedService()
