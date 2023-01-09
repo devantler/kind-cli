@@ -1,19 +1,22 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Devantler.KindCLI.Tests;
+namespace Devantler.KindCLI.Tests.Integration;
 
 public class ServiceCollectionExtensionsTests
 {
     [Fact]
     public void AddKindCliService_RegistersScopedService()
     {
-        var services = new ServiceCollection();
-        var configuration = new ConfigurationBuilder().Build();
+        //Arrange
+        ServiceCollection services = new();
+        IConfigurationRoot configuration = new ConfigurationBuilder().Build();
 
-        services.AddKindCliService();
+        //Act
+        _ = services.AddKindCliService();
 
-        var _ = Assert.Single(services, x =>
+        //Assert
+        _ = services.Should().ContainSingle(x =>
             x.ServiceType == typeof(IKindCliService) &&
             x.Lifetime == ServiceLifetime.Scoped);
     }

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devantler.KindCLI", "Devantler.KindCLI\Devantler.KindCLI.csproj", "{35881C59-00F5-4B3E-964A-F771457E16F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devantler.KindCLI.Tests", "Devantler.KindCLI.Tests\Devantler.KindCLI.Tests.csproj", "{F1605B3A-ADAC-406C-A3D7-DA4CC0D08F34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devantler.KindCLI.Tests.Integration", "Devantler.KindCLI.Tests.Integration\Devantler.KindCLI.Tests.Integration.csproj", "{F1605B3A-ADAC-406C-A3D7-DA4CC0D08F34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
