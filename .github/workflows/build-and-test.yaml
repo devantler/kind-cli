@@ -31,5 +31,5 @@ jobs:
       - name: Upload Code Coverage to CodeCov
         uses: codecov/codecov-action@v3
         with:
-          files: Devantler.KindCLI.Tests/TestResults/**/coverage.cobertura.xml
+          files: Devantler.KindCLI.Tests.*/TestResults/**/coverage.cobertura.xml
           fail_ci_if_error: true
