@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AnalysisMode>All</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>Devantler.KindCLI</PackageId>
-    <Version>0.17.2</Version>
+    <Version>0.17.3</Version>
     <Authors>devantler</Authors>
     <Company>Devantler Software</Company>
     <PackageDescription>A dotnet library to run Kind CLI commands.</PackageDescription>
