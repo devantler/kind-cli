@@ -73,9 +73,9 @@ public partial class KindCliService : IKindCliService
         Command command = (clusterName, logPath) switch
         {
             (null, null) => KindCli.WithArguments("export logs ./assets/logs/kind-logs"),
-            (null, _) => KindCli.WithArguments($"export logs ./assets/logs/{logPath}"),
+            (null, _) => KindCli.WithArguments($"export logs {logPath}"),
             (_, null) => KindCli.WithArguments($"export logs ./assets/logs/{clusterName}-logs --name {clusterName}"),
-            _ => KindCli.WithArguments($"export logs ./assets/logs/{logPath} --name {clusterName}")
+            _ => KindCli.WithArguments($"export logs {logPath} --name {clusterName}")
         };
         return await command.ExecuteBufferedAsync();
     }

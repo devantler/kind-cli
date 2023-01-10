@@ -2,147 +2,53 @@ namespace Devantler.KindCLI.Tests.Integration.KindCliServiceTests;
 
 public class CreateClusterAsyncTests : KindCliServiceTestsBase
 {
-    [Fact]
-    public async Task CreateClusterAsync_NoClusterName_CreatesDefaultCluster()
+    public static IEnumerable<object[]> ValidCases
     {
-        //Arrange
-        const string expected = "kind";
+        get
+        {
+            yield return new object[] { null!, null! };
+            yield return new object[] { Guid.NewGuid().ToString(), "assets/kind-config.yaml" };
+            yield return new object[] { Guid.NewGuid().ToString(), null! };
+        }
+    }
 
+    public static IEnumerable<object[]> InvalidCases
+    {
+        get
+        {
+            yield return new object[] { Guid.NewGuid().ToString(), "invalid-path/kind-config.yaml", ErrorMessages.InvalidConfigPath("invalid-path/kind-config.yaml") };
+            yield return new object[] { "@_~", null!, ErrorMessages.InvalidClusterName("@_~") };
+            yield return new object[] { "@_~", "assets/kind-config.yaml", ErrorMessages.InvalidClusterName("@_~") };
+            yield return new object[] { "@_~", "invalid-path/kind-config.yaml", ErrorMessages.InvalidClusterName("@_~") };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(ValidCases))]
+    public async Task CreateClusterAsync_ValidParameters_CreatesCluster(string? clusterName, string? configPath)
+    {
         //Act
-        await _kindCliService.CreateClusterAsync();
+        await _kindCliService.CreateClusterAsync(clusterName, configPath);
         IEnumerable<string> result = await _kindCliService.GetClustersAsync();
 
         //Assert
-        _ = result.Should().Contain(expected);
+        _ = result.Should().Contain(clusterName ?? "kind");
 
         //Cleanup
-        _ = await _kindCliService.DeleteClusterAsync(expected);
+        _ = await _kindCliService.DeleteClusterAsync(clusterName);
     }
 
-    [Fact]
-    public async Task CreateClusterAsync_ClusterNameAndValidClusterConfig_CreatesCustomClusterWithDefaultName()
+    [Theory]
+    [MemberData(nameof(InvalidCases))]
+    public void CreateClusterAsync_InvalidParameters_Throws(string? clusterName, string? configPath, string expected)
     {
-        //Arrange
-        string expected = Guid.NewGuid().ToString();
-        const string configPath = "assets/kind-config.yaml";
-
-        //Act
-        await _kindCliService.CreateClusterAsync(expected, configPath);
-        IEnumerable<string> result = await _kindCliService.GetClustersAsync();
-
-        //Assert
-        _ = result.Should().Contain(expected);
-
-        //Cleanup
-        _ = await _kindCliService.DeleteClusterAsync(expected);
-    }
-
-    [Fact]
-    public void CreateClusterAsync_ClusterNameAndInvalidClusterConfig_Throws()
-    {
-        //Arrange
-        const string configPath = "invalid-path/kind-config.yaml";
-        const string expected = $"The specified 'configPath': '{configPath}' does not exist.";
-        string clusterName = Guid.NewGuid().ToString();
-
         //Act
         Func<Task> action = async () => await _kindCliService.CreateClusterAsync(clusterName, configPath);
 
         //Assert
         _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
-    }
-
-    [Fact]
-    public async Task CreateClusterAsync_ValidClusterNameAndNoClusterConfig_CreatesNamedCluster()
-    {
-        //Arrange
-        string expected = Guid.NewGuid().ToString();
-
-        //Act
-        await _kindCliService.CreateClusterAsync(expected);
-        IEnumerable<string> result = await _kindCliService.GetClustersAsync();
-
-        //Assert
-        _ = result.Should().Contain(expected);
 
         //Cleanup
-        _ = await _kindCliService.DeleteClusterAsync(expected);
-    }
-
-    [Fact]
-    public async Task CreateClusterAsync_ValidClusterNameAndValidClusterConfig_CreatesCustomCluster()
-    {
-        //Arrange
-        const string configPath = "assets/kind-config.yaml";
-        string expected = Guid.NewGuid().ToString();
-
-        //Act
-        await _kindCliService.CreateClusterAsync(expected, configPath);
-        IEnumerable<string> result = await _kindCliService.GetClustersAsync();
-
-        //Assert
-        _ = result.Should().Contain(expected);
-
-        //Cleanup
-        _ = await _kindCliService.DeleteClusterAsync(expected);
-    }
-
-    [Fact]
-    public void CreateClusterAsync_ValidClusterNameAndInvalidClusterConfig_Throws()
-    {
-        //Arrange
-        const string configPath = "invalid-path/kind-config.yaml";
-        const string expected = $"The specified 'configPath': '{configPath}' does not exist.";
-        string clusterName = Guid.NewGuid().ToString();
-
-        //Act
-        Func<Task> action = async () => await _kindCliService.CreateClusterAsync(clusterName, configPath);
-
-        //Assert
-        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
-    }
-
-    [Fact]
-    public void CreateClusterAsync_InvalidClusterNameAndNoClusterConfig_Throws()
-    {
-        //Arrange
-        const string clusterName = "@_~";
-        const string expected = $"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'";
-
-        //Act
-        Func<Task> action = async () => await _kindCliService.CreateClusterAsync(clusterName);
-
-        //Assert
-        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
-    }
-
-    [Fact]
-    public void CreateClusterAsync_InvalidClusterNameAndValidClusterConfig_Throws()
-    {
-        //Arrange
-        const string clusterName = "@_~";
-        const string configPath = "assets/kind-config.yaml";
-        const string expected = $"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'";
-
-        //Act
-        Func<Task> action = async () => await _kindCliService.CreateClusterAsync(clusterName, configPath);
-
-        //Assert
-        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
-    }
-
-    [Fact]
-    public void CreateClusterAsync_InvalidClusterNameAndInvalidClusterConfig_Throws()
-    {
-        //Arrange
-        const string clusterName = "@_~";
-        const string configPath = "invalid-path/kind-config.yaml";
-        const string expected = $"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'";
-
-        //Act
-        Func<Task> action = async () => await _kindCliService.CreateClusterAsync(clusterName, configPath);
-
-        //Assert
-        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
+        _ = _kindCliService.DeleteClusterAsync(clusterName);
     }
 }

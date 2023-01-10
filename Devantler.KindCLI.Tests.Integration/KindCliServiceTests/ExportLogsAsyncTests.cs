@@ -2,16 +2,36 @@ namespace Devantler.KindCLI.Tests.Integration.KindCliServiceTests;
 
 public class ExportLogsAsyncTests : KindCliServiceTestsBase
 {
-    [Fact]
-    public async Task ExportLogsAsync_ValidClusterNameAndNoLogPath_ExportLogsFromNamedCluster()
+    public static IEnumerable<object[]> ValidCases
+    {
+        get
+        {
+            yield return new object[] { Guid.NewGuid().ToString(), null! };
+            yield return new object[] { Guid.NewGuid().ToString(), "assets/logs/custom-logs" };
+        }
+    }
+
+    public static IEnumerable<object[]> InvalidCases
+    {
+        get
+        {
+            yield return new object[] { "@_~", null!, ErrorMessages.InvalidClusterName("@_~") };
+            yield return new object[] { "@_~", "assets/logs/custom-logs", ErrorMessages.InvalidClusterName("@_~") };
+            yield return new object[] { "@_~", "@_~", ErrorMessages.InvalidClusterName("@_~") };
+            // yield return new object[] { Guid.NewGuid().ToString(), "@_~", ErrorMessages.InvalidLogPath("@_~") };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(ValidCases))]
+    public async Task ExportLogsAsync_ValidParameters_ExportLogsFromCluster(string? clusterName, string? logPath)
     {
         //Arrange
-        string clusterName = Guid.NewGuid().ToString();
-        string expected = $"assets/logs/{clusterName}-logs";
+        string expected = logPath ?? $"assets/logs/{clusterName}-logs";
+        await _kindCliService.CreateClusterAsync(clusterName);
 
         //Act
-        await _kindCliService.CreateClusterAsync(clusterName);
-        _ = await _kindCliService.ExportLogsAsync(clusterName);
+        _ = await _kindCliService.ExportLogsAsync(clusterName, expected);
         bool actual = Directory.Exists(expected);
 
         //Assert
@@ -22,53 +42,22 @@ public class ExportLogsAsyncTests : KindCliServiceTestsBase
         Directory.Delete(expected, true);
     }
 
-    [Fact]
-    public async Task ExportLogsAsync_ValidClusterNameAndLogPath_ExportLogsFromCustomLogPathOnNamedCluster()
+    [Theory]
+    [MemberData(nameof(InvalidCases))]
+    public async Task ExportLogsAsync_InvalidParameters_ThrowsAsync(string? clusterName, string? configPath, string expected)
     {
         //Arrange
-        const string expected = "assets/logs/named-cluster-logs";
-        const string logPath = "named-cluster-logs";
-        string clusterName = Guid.NewGuid().ToString();
+        if (clusterName != "@_~")
+            await _kindCliService.CreateClusterAsync(clusterName);
 
         //Act
-        await _kindCliService.CreateClusterAsync(clusterName);
-        _ = await _kindCliService.ExportLogsAsync(clusterName, logPath);
-        bool actual = Directory.Exists(expected);
+        Func<Task> action = async () => await _kindCliService.ExportLogsAsync(clusterName, configPath);
 
         //Assert
-        _ = actual.Should().BeTrue();
+        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
 
         //Cleanup
-        _ = await _kindCliService.DeleteClusterAsync(clusterName);
-        Directory.Delete(expected, true);
-    }
-
-    [Fact]
-    public void ExportLogsAsync_InvalidClusterNameAndNoLogPath_Throws()
-    {
-        //Arrange
-        const string clusterName = "@_~";
-        const string expected = $"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'";
-
-        //Act
-        Func<Task> action = async () => await _kindCliService.ExportLogsAsync(clusterName);
-
-        //Assert
-        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
-    }
-
-    [Fact]
-    public void ExportLogsAsync_InvalidClusterNameAndLogPath_Throws()
-    {
-        //Arrange
-        const string clusterName = "@_~";
-        const string logPath = "kind-logs.tar.gz";
-        const string expected = $"The specified 'clusterName': '{clusterName}' is invalid. It must match '^[a-z0-9.-]+$'";
-
-        //Act
-        Func<Task> action = async () => await _kindCliService.ExportLogsAsync(clusterName, logPath);
-
-        //Assert
-        _ = action.Should().ThrowAsync<ArgumentException>().WithMessage(expected);
+        if (clusterName != "@_~")
+            _ = await _kindCliService.DeleteClusterAsync(clusterName);
     }
 }
