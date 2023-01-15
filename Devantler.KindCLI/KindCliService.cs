@@ -85,7 +85,7 @@ public partial class KindCliService : IKindCliService
     {
         Command command = KindCli.WithArguments("get clusters");
         BufferedCommandResult result = await command.ExecuteBufferedAsync();
-        List<string> clusters = result.StandardOutput.Split(Environment.NewLine).ToList();
+        var clusters = result.StandardOutput.Split(Environment.NewLine).ToList();
         _ = clusters.RemoveAll(string.IsNullOrWhiteSpace);
         return clusters;
     }
