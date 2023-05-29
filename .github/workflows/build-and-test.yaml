@@ -19,7 +19,7 @@ jobs:
       - name: Set up test images
         run: docker pull nginx:alpine
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v3.1.0
+        uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: 7.0.x
       - name: Restore
